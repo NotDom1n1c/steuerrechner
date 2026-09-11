@@ -1,0 +1,39 @@
+/* responsive.css - Mobile-first Breakpoints */
+
+/* Tablet */
+@media (min-width: 640px) {
+  .site-header { padding: 1.25rem 1.5rem; }
+  .site-header h1 { font-size: 1.6rem; }
+  form fieldset { grid-template-columns: 1fr 1fr; column-gap: 1rem; }
+  .scenario-list li { grid-template-columns: 1.5fr 2fr auto; align-items: center; }
+}
+
+/* Desktop */
+@media (min-width: 960px) {
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(300px, 1fr) 2fr;
+    grid-template-areas:
+      "eingabe   ergebnis"
+      "eingabe   reverse"
+      "vergleich vergleich"
+      "progression progression"
+      "szenarien szenarien"
+      "quellen   quellen";
+    gap: 1rem;
+  }
+  .section-eingabe      { grid-area: eingabe; }
+  .section-result       { grid-area: ergebnis; }
+  .section-reverse      { grid-area: reverse; }
+  .section-vergleich    { grid-area: vergleich; }
+  .section-progression  { grid-area: progression; }
+  .section-szenarien    { grid-area: szenarien; }
+  .section-quellen      { grid-area: quellen; }
+  .chart-wrap { height: 380px; }
+}
+
+/* Sehr kleine Geraete */
+@media (max-width: 380px) {
+  .result-table th, .result-table td { padding: 0.35rem 0.4rem; font-size: 0.85rem; }
+  .site-header h1 { font-size: 1.2rem; }
+}

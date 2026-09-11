@@ -1,0 +1,106 @@
+{
+  "kanton": "BS",
+  "kanton_name": "Basel-Stadt",
+  "jahr": 2026,
+  "quelle": "ESTV swisstaxcalculator – Grunddaten Tarife + Steuerfuesse (Einkommen)",
+  "abgerufen": "2026-06-08",
+  "kantonssteuerfuss": 50,
+  "splittingfaktor": 0,
+  "gemeinden": {
+    "Basel": {
+      "fuss": 50,
+      "rk": 8,
+      "ev": 8
+    },
+    "Riehen": {
+      "fuss": 40,
+      "rk": 8,
+      "ev": 8
+    },
+    "Bettingen": {
+      "fuss": 37.5,
+      "rk": 8,
+      "ev": 8
+    }
+  },
+  "tarif_ledig": [
+    {
+      "bis": 212500,
+      "fix": 0,
+      "satz": 0.21,
+      "ueber": 0
+    },
+    {
+      "bis": 316300,
+      "fix": 44625,
+      "satz": 0.2725,
+      "ueber": 212500
+    },
+    {
+      "bis": null,
+      "fix": 72910.5,
+      "satz": 0.2825,
+      "ueber": 316300
+    }
+  ],
+  "tarif_verheiratet": [
+    {
+      "bis": 424900,
+      "fix": 0,
+      "satz": 0.21,
+      "ueber": 0
+    },
+    {
+      "bis": 632500,
+      "fix": 89229,
+      "satz": 0.2725,
+      "ueber": 424900
+    },
+    {
+      "bis": null,
+      "fix": 145800,
+      "satz": 0.2825,
+      "ueber": 632500
+    }
+  ],
+  "tarif_vermoegen_ledig": [
+    {
+      "bis": 250000,
+      "fix": 0,
+      "satz": 0.0045,
+      "ueber": 0
+    },
+    {
+      "bis": 750000,
+      "fix": 1125,
+      "satz": 0.0065,
+      "ueber": 250000
+    },
+    {
+      "bis": null,
+      "fix": 4375,
+      "satz": 0.0079,
+      "ueber": 750000
+    }
+  ],
+  "tarif_vermoegen_verheiratet": [
+    {
+      "bis": 400000,
+      "fix": 0,
+      "satz": 0.0045,
+      "ueber": 0
+    },
+    {
+      "bis": 1200000,
+      "fix": 1800,
+      "satz": 0.0065,
+      "ueber": 400000
+    },
+    {
+      "bis": null,
+      "fix": 7000,
+      "satz": 0.0079,
+      "ueber": 1200000
+    }
+  ]
+}

@@ -1,0 +1,262 @@
+{
+  "kanton": "ZG",
+  "kanton_name": "Zug",
+  "jahr": 2026,
+  "quelle": "ESTV swisstaxcalculator – Grunddaten Tarife + Steuerfuesse (Einkommen)",
+  "abgerufen": "2026-06-08",
+  "kantonssteuerfuss": 78,
+  "splittingfaktor": 0,
+  "gemeinden": {
+    "Zug": {
+      "fuss": 52,
+      "rk": 5.95,
+      "ev": 6
+    },
+    "Baar": {
+      "fuss": 47.53,
+      "rk": 6.65,
+      "ev": 6
+    },
+    "Cham": {
+      "fuss": 54,
+      "rk": 8.1,
+      "ev": 6
+    }
+  },
+  "tarif_ledig": [
+    {
+      "bis": 1100,
+      "fix": 0,
+      "satz": 0.005,
+      "ueber": 0
+    },
+    {
+      "bis": 3300,
+      "fix": 5.5,
+      "satz": 0.01,
+      "ueber": 1100
+    },
+    {
+      "bis": 6100,
+      "fix": 27.5,
+      "satz": 0.02,
+      "ueber": 3300
+    },
+    {
+      "bis": 10100,
+      "fix": 83.5,
+      "satz": 0.03,
+      "ueber": 6100
+    },
+    {
+      "bis": 15300,
+      "fix": 203.5,
+      "satz": 0.0325,
+      "ueber": 10100
+    },
+    {
+      "bis": 21100,
+      "fix": 372.5,
+      "satz": 0.035,
+      "ueber": 15300
+    },
+    {
+      "bis": 26900,
+      "fix": 575.5,
+      "satz": 0.04,
+      "ueber": 21100
+    },
+    {
+      "bis": 34900,
+      "fix": 807.5,
+      "satz": 0.045,
+      "ueber": 26900
+    },
+    {
+      "bis": 46400,
+      "fix": 1167.5,
+      "satz": 0.055,
+      "ueber": 34900
+    },
+    {
+      "bis": 59700,
+      "fix": 1800,
+      "satz": 0.055,
+      "ueber": 46400
+    },
+    {
+      "bis": 74700,
+      "fix": 2531.5,
+      "satz": 0.065,
+      "ueber": 59700
+    },
+    {
+      "bis": 94800,
+      "fix": 3506.5,
+      "satz": 0.08,
+      "ueber": 74700
+    },
+    {
+      "bis": 120100,
+      "fix": 5114.5,
+      "satz": 0.1,
+      "ueber": 94800
+    },
+    {
+      "bis": 149900,
+      "fix": 7644.5,
+      "satz": 0.09,
+      "ueber": 120100
+    },
+    {
+      "bis": null,
+      "fix": 10326.5,
+      "satz": 0.08,
+      "ueber": 149900
+    }
+  ],
+  "tarif_verheiratet": [
+    {
+      "bis": 2200,
+      "fix": 0,
+      "satz": 0.005,
+      "ueber": 0
+    },
+    {
+      "bis": 6600,
+      "fix": 11,
+      "satz": 0.01,
+      "ueber": 2200
+    },
+    {
+      "bis": 12200,
+      "fix": 55,
+      "satz": 0.02,
+      "ueber": 6600
+    },
+    {
+      "bis": 20200,
+      "fix": 167,
+      "satz": 0.03,
+      "ueber": 12200
+    },
+    {
+      "bis": 30600,
+      "fix": 407,
+      "satz": 0.0325,
+      "ueber": 20200
+    },
+    {
+      "bis": 42200,
+      "fix": 745,
+      "satz": 0.035,
+      "ueber": 30600
+    },
+    {
+      "bis": 53800,
+      "fix": 1151,
+      "satz": 0.04,
+      "ueber": 42200
+    },
+    {
+      "bis": 69800,
+      "fix": 1615,
+      "satz": 0.045,
+      "ueber": 53800
+    },
+    {
+      "bis": 92800,
+      "fix": 2335,
+      "satz": 0.055,
+      "ueber": 69800
+    },
+    {
+      "bis": 119400,
+      "fix": 3600,
+      "satz": 0.055,
+      "ueber": 92800
+    },
+    {
+      "bis": 149400,
+      "fix": 5063,
+      "satz": 0.065,
+      "ueber": 119400
+    },
+    {
+      "bis": 189600,
+      "fix": 7013,
+      "satz": 0.08,
+      "ueber": 149400
+    },
+    {
+      "bis": 240200,
+      "fix": 10229,
+      "satz": 0.1,
+      "ueber": 189600
+    },
+    {
+      "bis": 299800,
+      "fix": 15289,
+      "satz": 0.09,
+      "ueber": 240200
+    },
+    {
+      "bis": null,
+      "fix": 20653,
+      "satz": 0.08,
+      "ueber": 299800
+    }
+  ],
+  "tarif_vermoegen_ledig": [
+    {
+      "bis": 254000,
+      "fix": 0,
+      "satz": 0.000425,
+      "ueber": 0
+    },
+    {
+      "bis": 508000,
+      "fix": 107.95,
+      "satz": 0.00085,
+      "ueber": 254000
+    },
+    {
+      "bis": 762000,
+      "fix": 323.85,
+      "satz": 0.001275,
+      "ueber": 508000
+    },
+    {
+      "bis": null,
+      "fix": 647.7,
+      "satz": 0.0017,
+      "ueber": 762000
+    }
+  ],
+  "tarif_vermoegen_verheiratet": [
+    {
+      "bis": 254000,
+      "fix": 0,
+      "satz": 0.000425,
+      "ueber": 0
+    },
+    {
+      "bis": 508000,
+      "fix": 107.95,
+      "satz": 0.00085,
+      "ueber": 254000
+    },
+    {
+      "bis": 762000,
+      "fix": 323.85,
+      "satz": 0.001275,
+      "ueber": 508000
+    },
+    {
+      "bis": null,
+      "fix": 647.7,
+      "satz": 0.0017,
+      "ueber": 762000
+    }
+  ]
+}

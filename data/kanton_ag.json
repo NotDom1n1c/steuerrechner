@@ -1,0 +1,274 @@
+{
+  "kanton": "AG",
+  "kanton_name": "Aargau",
+  "jahr": 2025,
+  "quelle": "ESTV swisstaxcalculator – Grunddaten Tarife + Steuerfuesse (Einkommen)",
+  "abgerufen": "2026-06-08",
+  "kantonssteuerfuss": 111,
+  "splittingfaktor": 2,
+  "gemeinden": {
+    "Aarau": {
+      "fuss": 96,
+      "rk": 19,
+      "ev": 15
+    },
+    "Baden": {
+      "fuss": 92,
+      "rk": 19,
+      "ev": 18
+    },
+    "Wettingen": {
+      "fuss": 95,
+      "rk": 19,
+      "ev": 18
+    }
+  },
+  "tarif_ledig": [
+    {
+      "bis": 4300,
+      "fix": 0,
+      "satz": 0.0,
+      "ueber": 0
+    },
+    {
+      "bis": 8100,
+      "fix": 0,
+      "satz": 0.01,
+      "ueber": 4300
+    },
+    {
+      "bis": 12000,
+      "fix": 38,
+      "satz": 0.02,
+      "ueber": 8100
+    },
+    {
+      "bis": 16200,
+      "fix": 116,
+      "satz": 0.03,
+      "ueber": 12000
+    },
+    {
+      "bis": 20500,
+      "fix": 242,
+      "satz": 0.04,
+      "ueber": 16200
+    },
+    {
+      "bis": 25700,
+      "fix": 414,
+      "satz": 0.05,
+      "ueber": 20500
+    },
+    {
+      "bis": 33100,
+      "fix": 674,
+      "satz": 0.06,
+      "ueber": 25700
+    },
+    {
+      "bis": 41700,
+      "fix": 1118,
+      "satz": 0.07,
+      "ueber": 33100
+    },
+    {
+      "bis": 51300,
+      "fix": 1720,
+      "satz": 0.08,
+      "ueber": 41700
+    },
+    {
+      "bis": 63100,
+      "fix": 2488,
+      "satz": 0.085,
+      "ueber": 51300
+    },
+    {
+      "bis": 74800,
+      "fix": 3491,
+      "satz": 0.09,
+      "ueber": 63100
+    },
+    {
+      "bis": 110100,
+      "fix": 4544,
+      "satz": 0.095,
+      "ueber": 74800
+    },
+    {
+      "bis": 176400,
+      "fix": 7897.5,
+      "satz": 0.1,
+      "ueber": 110100
+    },
+    {
+      "bis": 352700,
+      "fix": 14527.5,
+      "satz": 0.105,
+      "ueber": 176400
+    },
+    {
+      "bis": null,
+      "fix": 33039,
+      "satz": 0.11,
+      "ueber": 352700
+    }
+  ],
+  "tarif_verheiratet": [
+    {
+      "bis": 8600,
+      "fix": 0,
+      "satz": 0.0,
+      "ueber": 0
+    },
+    {
+      "bis": 16200,
+      "fix": 0,
+      "satz": 0.01,
+      "ueber": 8600
+    },
+    {
+      "bis": 24000,
+      "fix": 76,
+      "satz": 0.02,
+      "ueber": 16200
+    },
+    {
+      "bis": 32400,
+      "fix": 232,
+      "satz": 0.03,
+      "ueber": 24000
+    },
+    {
+      "bis": 41000,
+      "fix": 484,
+      "satz": 0.04,
+      "ueber": 32400
+    },
+    {
+      "bis": 51400,
+      "fix": 828,
+      "satz": 0.05,
+      "ueber": 41000
+    },
+    {
+      "bis": 66200,
+      "fix": 1348,
+      "satz": 0.06,
+      "ueber": 51400
+    },
+    {
+      "bis": 83400,
+      "fix": 2236,
+      "satz": 0.07,
+      "ueber": 66200
+    },
+    {
+      "bis": 102600,
+      "fix": 3440,
+      "satz": 0.08,
+      "ueber": 83400
+    },
+    {
+      "bis": 126200,
+      "fix": 4976,
+      "satz": 0.085,
+      "ueber": 102600
+    },
+    {
+      "bis": 149600,
+      "fix": 6982,
+      "satz": 0.09,
+      "ueber": 126200
+    },
+    {
+      "bis": 220200,
+      "fix": 9088,
+      "satz": 0.095,
+      "ueber": 149600
+    },
+    {
+      "bis": 352800,
+      "fix": 15795,
+      "satz": 0.1,
+      "ueber": 220200
+    },
+    {
+      "bis": 705400,
+      "fix": 29055,
+      "satz": 0.105,
+      "ueber": 352800
+    },
+    {
+      "bis": null,
+      "fix": 66078,
+      "satz": 0.11,
+      "ueber": 705400
+    }
+  ],
+  "tarif_vermoegen_ledig": [
+    {
+      "bis": 107000,
+      "fix": 0,
+      "satz": 0.0007,
+      "ueber": 0
+    },
+    {
+      "bis": 214000,
+      "fix": 74.9,
+      "satz": 0.001,
+      "ueber": 107000
+    },
+    {
+      "bis": 321000,
+      "fix": 181.9,
+      "satz": 0.0012,
+      "ueber": 214000
+    },
+    {
+      "bis": 428000,
+      "fix": 310.3,
+      "satz": 0.0014,
+      "ueber": 321000
+    },
+    {
+      "bis": null,
+      "fix": 460.1,
+      "satz": 0.0016,
+      "ueber": 428000
+    }
+  ],
+  "tarif_vermoegen_verheiratet": [
+    {
+      "bis": 107000,
+      "fix": 0,
+      "satz": 0.0007,
+      "ueber": 0
+    },
+    {
+      "bis": 214000,
+      "fix": 74.9,
+      "satz": 0.001,
+      "ueber": 107000
+    },
+    {
+      "bis": 321000,
+      "fix": 181.9,
+      "satz": 0.0012,
+      "ueber": 214000
+    },
+    {
+      "bis": 428000,
+      "fix": 310.3,
+      "satz": 0.0014,
+      "ueber": 321000
+    },
+    {
+      "bis": null,
+      "fix": 460.1,
+      "satz": 0.0016,
+      "ueber": 428000
+    }
+  ]
+}
