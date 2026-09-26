@@ -197,6 +197,7 @@
     renderProgression(input, ktData);
     render3aVorteil(input, ktData, dreiA);
     renderTrace(input, inputEffektiv, ktData);
+    onReverseSearch(); // Rueckwaerts-Rechnung haengt an Zivilstand/Konfession, darum mitlaufen lassen
     syncUrl(input, dreiA);
   }
 
@@ -208,10 +209,12 @@
     const netto = input.einkommen - r.total;
     const marg = SteuerCalc.calcMarginalsatz(inputEffektiv, state.bundData, state.kantone[input.kanton]);
 
+    renderSummary(r, input, marg);
+
     let html = '';
     html += row('Bruttoeinkommen', 'CHF ' + fmtChf(input.einkommen));
     if (dreiA > 0) {
-      html += row('- Saeule 3a Einzahlung', '- CHF ' + fmtChf(dreiA));
+      html += row('- Säule 3a Einzahlung', '- CHF ' + fmtChf(dreiA));
       html += row('Steuerbares Einkommen', 'CHF ' + fmtChf(inputEffektiv.einkommen));
     }
     html += row('Bundessteuer', 'CHF ' + fmtChf(r.bund));
@@ -227,10 +230,80 @@
     }
     html += '<tr class="row-total"><th>Total Steuer</th><td>CHF ' + fmtChf(r.total) + '</td></tr>';
     html += row('Durchschnittssatz (Total / Brutto)', fmtPct(r.total / Math.max(1, input.einkommen)));
-    html += row('Marginalsatz (naechste 100 CHF)', fmtPct(marg));
+    html += row('Grenzsteuersatz (nächste 100 CHF)', fmtPct(marg));
     html += row('Netto pro Jahr', 'CHF ' + fmtChf(netto));
     html += row('Netto pro Monat', 'CHF ' + fmtChf(netto / 12));
     tb.innerHTML = html;
+  }
+
+  // --- Render: Kennzahlen + "Wohin geht dein Lohn" -----------------------
+
+  // Zahl weich hochzaehlen statt springen (respektiert reduced motion)
+  const _tweens = {};
+  function tweenNumber(id, to, fmt) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const from = _tweens[id] ? _tweens[id].value : 0;
+    if (_tweens[id]) cancelAnimationFrame(_tweens[id].raf);
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !Number.isFinite(from)) { el.textContent = fmt(to); _tweens[id] = { value: to }; return; }
+    const t0 = performance.now(), dur = 550;
+    const state = { value: from, raf: 0 };
+    _tweens[id] = state;
+    (function step(now) {
+      const t = Math.min(1, (now - t0) / dur);
+      const e = 1 - Math.pow(1 - t, 3);
+      state.value = from + (to - from) * e;
+      el.textContent = fmt(state.value);
+      if (t < 1) state.raf = requestAnimationFrame(step);
+    })(t0);
+  }
+
+  function renderSummary(r, input, marg) {
+    const brutto = Math.max(0, input.einkommen);
+    const netto = brutto - r.total;
+    tweenNumber('kpi-netto', netto / 12, function (v) { return fmtIntApostrophe(v); });
+    tweenNumber('kpi-total', r.total, function (v) { return 'CHF ' + fmtIntApostrophe(v); });
+    tweenNumber('kpi-avg', r.total / Math.max(1, brutto), fmtPct);
+    tweenNumber('kpi-marg', marg, fmtPct);
+
+    const ctx = document.getElementById('kpi-context');
+    if (ctx) {
+      ctx.textContent = '· ' + r.gemeinde + ' ' + input.kanton + ' · ' +
+        (input.zivilstand === 'verheiratet' ? 'verheiratet' : 'ledig');
+    }
+
+    // Aufteilung des Bruttoeinkommens in Steuerarten + Netto
+    const parts = [
+      { key: 'bund', label: 'Bund', value: r.bund, dark: true },
+      { key: 'kanton', label: 'Kanton', value: r.kantonssteuer, dark: true },
+      { key: 'gemeinde', label: 'Gemeinde', value: r.gemeindesteuer },
+      { key: 'kirche', label: 'Kirche', value: r.kirchensteuer },
+      { key: 'vermoegen', label: 'Vermögen', value: r.vermoegenssteuer || 0, dark: true }
+    ].filter(function (p) { return p.value > 0.5; });
+    const bar = document.getElementById('split-bar');
+    const legend = document.getElementById('split-legend');
+    if (!bar || !legend) return;
+    const base = Math.max(1, brutto, r.total);
+    let barHtml = '', legHtml = '';
+    parts.forEach(function (p) {
+      const pct = p.value / base * 100;
+      barHtml += '<span class="' + (p.dark ? 'on-dark' : 'on-light') + '" style="flex-grow:' + pct.toFixed(3) +
+        ';background:var(--s-' + p.key + ')" title="' + p.label + ': CHF ' + fmtChf(p.value) + '">' +
+        (pct >= 4 ? pct.toFixed(1) + '%' : '') + '</span>';
+      legHtml += '<li><i style="background:var(--s-' + p.key + ')"></i>' + p.label + ' <b>' + fmtIntApostrophe(p.value) + '</b></li>';
+    });
+    const nettoPct = Math.max(0, netto) / base * 100;
+    barHtml += '<span class="on-light" style="flex-grow:' + nettoPct.toFixed(3) + ';background:var(--s-netto)" title="Netto: CHF ' +
+      fmtChf(netto) + '">' + (nettoPct >= 8 ? 'Netto ' + nettoPct.toFixed(1) + '%' : '') + '</span>';
+    legHtml += '<li class="muted-li"><i style="background:var(--s-netto);outline:1px solid var(--line)"></i>Bleibt dir <b>' + fmtIntApostrophe(netto) + '</b></li>';
+    bar.innerHTML = barHtml;
+    legend.innerHTML = legHtml;
+
+    const h = document.getElementById('split-hundert');
+    if (h) h.textContent = '100 Franken';
+    const steuernPro100 = r.total / Math.max(1, brutto) * 100;
+    bar.setAttribute('aria-label', 'Von 100 Franken Lohn gehen ' + steuernPro100.toFixed(2) + ' Franken an Steuern.');
   }
 
   function row(label, value) {
@@ -249,16 +322,16 @@
       const diff = r.total - currentTotal;
       const diffStr = (diff === 0) ? '-' :
         (diff < 0 ? '<span class="diff-minus">' : '<span class="diff-plus">') +
-        (diff > 0 ? '+' : '') + 'CHF ' + fmtChf(diff) + '</span>';
+        (diff > 0 ? '+' : '') + fmtChf(diff) + '</span>';
       tr.innerHTML =
         '<td>' + r.kanton + '</td>' +
         '<td>' + r.gemeinde + '</td>' +
-        '<td>CHF ' + fmtChf(r.bund) + '</td>' +
-        '<td>CHF ' + fmtChf(r.kantonssteuer) + '</td>' +
-        '<td>CHF ' + fmtChf(r.gemeindesteuer) + '</td>' +
-        '<td>CHF ' + fmtChf(r.kirchensteuer) + '</td>' +
-        '<td>CHF ' + fmtChf(r.vermoegenssteuer || 0) + '</td>' +
-        '<td><strong>CHF ' + fmtChf(r.total) + '</strong></td>' +
+        '<td>' + fmtChf(r.bund) + '</td>' +
+        '<td>' + fmtChf(r.kantonssteuer) + '</td>' +
+        '<td>' + fmtChf(r.gemeindesteuer) + '</td>' +
+        '<td>' + fmtChf(r.kirchensteuer) + '</td>' +
+        '<td>' + fmtChf(r.vermoegenssteuer || 0) + '</td>' +
+        '<td><strong>' + fmtChf(r.total) + '</strong></td>' +
         '<td>' + diffStr + '</td>';
       tb.appendChild(tr);
     });
@@ -320,12 +393,12 @@
   function onReverseSearch() {
     const wunsch = Number(document.getElementById('reverse-netto').value);
     if (!Number.isFinite(wunsch) || wunsch <= 0) {
-      document.getElementById('reverse-out').textContent = 'Bitte gueltigen Wunsch-Netto eingeben.';
+      document.getElementById('reverse-out').textContent = 'Bitte einen gültigen Wunsch-Netto eingeben.';
       return;
     }
     const input = readInput();
     const out = document.getElementById('reverse-out');
-    out.innerHTML = 'Berechne...';
+    out.innerHTML = 'Berechne …';
     // Fuer jeden Kanton: ermittle benoetigtes Brutto am Hauptort
     const lines = [];
     KANTONE.forEach(function (kt) {
@@ -338,7 +411,7 @@
       } catch (e) { /* ignore */ }
     });
     lines.sort(function (a, b) { return a.brutto - b.brutto; });
-    out.innerHTML = '<table class="result-table compact"><thead><tr><th>Kanton</th><th>Hauptort</th><th>Benoetigtes Brutto/Jahr</th></tr></thead><tbody>' +
+    out.innerHTML = '<table class="result-table compact"><thead><tr><th>Kanton</th><th>Hauptort</th><th>Nötiges Brutto/Jahr</th></tr></thead><tbody>' +
       lines.map(function (l) {
         return '<tr><td>' + l.kt + '</td><td>' + l.gemeinde + '</td><td>CHF ' + fmtChf(l.brutto) + '</td></tr>';
       }).join('') + '</tbody></table>';
@@ -347,7 +420,7 @@
   // --- CSV Export --------------------------------------------------------
 
   function onCsvExport() {
-    if (!state.lastResults) { showError('Erst eine Berechnung durchfuehren.'); return; }
+    if (!state.lastResults) { showError('Erst eine Berechnung durchführen.'); return; }
     const v = state.lastResults.vergleich;
     const lines = ['Kanton;Gemeinde;Bund;Kanton;Gemeinde;Kirche;Vermoegen;Total'];
     v.forEach(function (r) {
@@ -417,18 +490,31 @@
     const url = base + '?' + buildQuery(readInput(), read3a());
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(url).then(function () {
-        alert('Link in Zwischenablage kopiert:\n' + url);
+        showToast('Link kopiert. Wer ihn öffnet, sieht genau deine Eingaben.');
       }, function () { prompt('Link:', url); });
     } else {
       prompt('Link:', url);
     }
   }
 
+  // --- Toast -------------------------------------------------------------
+
+  let _toastTimer = null;
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.hidden = false;
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(function () { el.hidden = true; }, 2600);
+  }
+
   // --- Reset -------------------------------------------------------------
 
   function onReset() {
-    setInput({ einkommen: 80000, zivilstand: 'ledig', konfession: 'keine', kanton: 'ZH', gemeinde: 'Zuerich' });
+    setInput({ einkommen: 80000, vermoegen: 0, zivilstand: 'ledig', konfession: 'keine', kanton: 'ZH', gemeinde: state.hauptorte.ZH });
     document.getElementById('saeule3a').value = 0;
+    showToast('Zurückgesetzt');
     rechnen();
   }
 
@@ -450,6 +536,7 @@
     const next = (cur === 'dark') ? 'light' : 'dark';
     try { localStorage.setItem(THEME_KEY, next); } catch (e) { /* ignore */ }
     applyTheme(next);
+    if (state.lastResults) rechnen(); // Diagramme lesen die Farben aus den CSS-Variablen
   }
 
   // --- Saved Scenarios ---------------------------------------------------
@@ -479,8 +566,8 @@
         '<span class="sc-actions">' +
           '<button type="button" data-action="load">Laden</button>' +
           '<button type="button" data-action="rename">Umbenennen</button>' +
-          '<button type="button" data-action="delete">Loeschen</button>' +
-          '<input type="checkbox" class="sc-compare" aria-label="Fuer Vergleich auswaehlen">' +
+          '<button type="button" data-action="delete">Löschen</button>' +
+          '<input type="checkbox" class="sc-compare" aria-label="Für Vergleich auswählen">' +
         '</span>';
       list.appendChild(li);
     });
@@ -505,13 +592,13 @@
       if (!r.ok) { showError(r.error); return; }
       setInput(r.data); rechnen();
     } else if (action === 'delete') {
-      if (confirm('Szenario "' + name + '" wirklich loeschen?')) {
+      if (confirm('Szenario "' + name + '" wirklich löschen?')) {
         const r = SteuerStorage.deleteScenario(name);
         if (!r.ok) { showError(r.error); return; }
         refreshScenarioList();
       }
     } else if (action === 'rename') {
-      const neu = prompt('Neuer Name fuer "' + name + '":', name);
+      const neu = prompt('Neuer Name für "' + name + '":', name);
       if (neu === null) return;
       const v = SteuerValidate.validateScenarioName(neu);
       if (!v.valid) { showError(v.errors.join(' ')); return; }
@@ -527,18 +614,19 @@
     const gemeinden = ktData ? Object.keys(ktData.gemeinden) : null;
     const iv = SteuerValidate.validateInput(input, gemeinden);
     if (!iv.valid) { showError(iv.errors.join(' ')); return; }
-    const name = prompt('Name fuer das Szenario:');
+    const name = prompt('Name für das Szenario:');
     if (name === null) return;
     const v = SteuerValidate.validateScenarioName(name);
     if (!v.valid) { showError(v.errors.join(' ')); return; }
     const r = SteuerStorage.saveScenario(v.value, input);
     if (!r.ok) { showError(r.error); return; }
     refreshScenarioList();
+    showToast('Szenario «' + v.value + '» gespeichert');
   }
 
   function onCompareScenarios() {
     const checked = Array.from(document.querySelectorAll('.sc-compare:checked'));
-    if (checked.length !== 2) { showError('Bitte genau zwei Szenarien fuer den Vergleich auswaehlen.'); return; }
+    if (checked.length !== 2) { showError('Bitte genau zwei Szenarien für den Vergleich auswählen.'); return; }
     const names = checked.map(function (c) { return c.closest('li').dataset.name; });
     const a = SteuerStorage.loadScenario(names[0]).data;
     const b = SteuerStorage.loadScenario(names[1]).data;
@@ -610,6 +698,10 @@
     document.getElementById('btn-reset').addEventListener('click', onReset);
     document.getElementById('btn-csv').addEventListener('click', onCsvExport);
     document.getElementById('btn-reverse').addEventListener('click', onReverseSearch);
+    document.getElementById('reverse-netto').addEventListener('input', function () {
+      clearTimeout(state.reverseTimer);
+      state.reverseTimer = setTimeout(onReverseSearch, 250);
+    });
     document.getElementById('btn-theme').addEventListener('click', toggleTheme);
     document.getElementById('scenario-list').addEventListener('click', onScenarioListClick);
     document.getElementById('btn-compare').addEventListener('click', onCompareScenarios);
@@ -629,7 +721,7 @@
       rechnen();
     }).catch(function (e) {
       showError('Daten konnten nicht geladen werden: ' + (e.message || e) +
-        ' (Tipp: Seite ueber http(s):// oeffnen oder data/embedded.js nutzen.)');
+        ' (Tipp: Seite über http(s):// öffnen oder data/embedded.js nutzen.)');
     });
   }
 

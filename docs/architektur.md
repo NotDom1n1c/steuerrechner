@@ -139,7 +139,8 @@ Generierung: `node scripts/generate_embedded.js`
 
 Theme via `body[data-theme="light|dark"]`. Alle Farben sind CSS Custom
 Properties, sodass das Umschalten nur ein Attribut-Wechsel ist. Persistenz
-in localStorage.
+in localStorage. Die Diagramme lesen ihre Farben ebenfalls aus diesen
+Variablen und werden beim Umschalten neu gezeichnet.
 
 ### Cache-Busting
 

@@ -1,171 +1,278 @@
 <!doctype html>
-<html lang="de">
+<html lang="de-CH">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Schweizer Steuerrechner 2026</title>
-  <meta name="description" content="Vergleich der Einkommenssteuer in den Kantonen AG, BE, BS, ZG und ZH. Lokal im Browser, ohne Server.">
+  <meta name="description" content="Vergleich der Einkommens- und Vermögenssteuer in den Kantonen AG, BE, BS, ZG und ZH. Echte ESTV-Tarife, lokal im Browser, ohne Server.">
   <link rel="icon" href="src/img/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Schibsted+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="src/css/reset.css">
-  <link rel="stylesheet" href="src/css/main.css">
-  <link rel="stylesheet" href="src/css/responsive.css">
+  <link rel="stylesheet" href="src/css/main.css?v=7">
 </head>
 <body data-theme="light">
 
-<header class="site-header">
-  <div class="header-row">
-    <div class="brand">
-      <img class="site-logo" src="src/img/logo.svg" alt="TC Logo" width="40" height="50">
-      <h1>Schweizer Steuerrechner <span class="year">2026</span></h1>
-    </div>
-    <button id="btn-theme" class="theme-toggle" type="button" aria-label="Dark Mode umschalten" title="Dark Mode umschalten">&#9789;</button>
-  </div>
-  <p class="privacy-banner">
-    Alle Berechnungen laufen lokal in deinem Browser. Keine Daten verlassen dein Geraet.
-  </p>
-  <p class="info-banner">
-    Einkommens- &amp; Vermögenssteuer &middot; echte ESTV-Tarife, Stand 2025/2026 &middot; Kantone AG, BE, BS, ZG, ZH + Bund.
-  </p>
-  <!-- Sicherheitsnetz: erscheint nur, falls je Platzhalterdaten geladen werden -->
-  <p id="platzhalter-banner" class="warn-banner" hidden></p>
+<a class="skip" href="#rechner">Zum Rechner springen</a>
+
+<!-- ============ TOP BAR ============ -->
+<header class="topbar">
+  <a class="brand" href="./" aria-label="Schweizer Steuerrechner, Startseite">
+    <span class="brand-mark" aria-hidden="true">%</span>
+    <span class="brand-name">Steuerrechner<span class="brand-year">26</span></span>
+  </a>
+  <nav class="topnav" aria-label="Abschnitte">
+    <a href="#rechner">Rechner</a>
+    <a href="#vergleich">Vergleich</a>
+    <a href="#progression">Progression</a>
+    <a href="#szenarien">Szenarien</a>
+  </nav>
+  <span class="local-pill" title="Alle Berechnungen laufen lokal in deinem Browser. Keine Daten verlassen dein Gerät."><i></i>100 % lokal</span>
+  <button id="btn-theme" class="theme-toggle" type="button" aria-label="Dark Mode umschalten" title="Dark Mode umschalten">&#9789;</button>
 </header>
 
-<main class="layout">
+<!-- ============ HERO ============ -->
+<section class="hero" aria-labelledby="h-hero">
+  <p class="kicker"><span class="kicker-sq"></span>Einkommens- &amp; Vermögenssteuer · Stand 2025/2026</p>
+  <h1 id="h-hero" class="hero-title"><span>Was bleibt dir</span> <span>vom <em>Lohn</em>?</span></h1>
+  <div class="hero-facts">
+    <p class="privacy-banner">Alle Berechnungen laufen lokal in deinem Browser. Keine Daten verlassen dein Gerät.</p>
+    <p class="info-banner">Echte ESTV-Tarife · Kantone AG, BE, BS, ZG, ZH + Bund · Kirchen- und Vermögenssteuer inklusive.</p>
+  </div>
+  <!-- Sicherheitsnetz: erscheint nur, falls je Platzhalterdaten geladen werden -->
+  <p id="platzhalter-banner" class="warn-banner" hidden></p>
+</section>
 
-  <section aria-labelledby="h-eingabe" class="card section-eingabe">
-    <h2 id="h-eingabe">Eingabe</h2>
+<main id="rechner" class="calc">
+
+  <!-- ============ EINGABE ============ -->
+  <section aria-labelledby="h-eingabe" class="panel panel-input">
+    <div class="panel-head">
+      <span class="sec-nr">A</span>
+      <h2 id="h-eingabe">Deine Angaben</h2>
+    </div>
     <form id="form-eingabe" novalidate>
       <fieldset>
-        <legend class="visually-hidden">Persoenliche Angaben</legend>
+        <legend class="visually-hidden">Persönliche Angaben</legend>
 
-        <label for="einkommen-display">Bruttoeinkommen (CHF / Jahr)</label>
-        <input type="text" id="einkommen-display" inputmode="numeric" autocomplete="off" value="80'000" required>
-        <input type="hidden" id="einkommen" value="80000">
+        <div class="field field-big">
+          <label for="einkommen-display">Bruttoeinkommen pro Jahr</label>
+          <div class="money-input">
+            <span>CHF</span>
+            <input type="text" id="einkommen-display" inputmode="numeric" autocomplete="off" value="80'000" required>
+          </div>
+          <input type="hidden" id="einkommen" value="80000">
+        </div>
 
-        <label for="zivilstand">Zivilstand</label>
-        <select id="zivilstand" name="zivilstand">
-          <option value="ledig">Ledig</option>
-          <option value="verheiratet">Verheiratet (gemeinsam)</option>
-        </select>
+        <div class="field">
+          <label for="zivilstand">Zivilstand</label>
+          <select id="zivilstand" name="zivilstand">
+            <option value="ledig">Ledig</option>
+            <option value="verheiratet">Verheiratet (gemeinsam)</option>
+          </select>
+        </div>
 
-        <label for="konfession">Konfession</label>
-        <select id="konfession" name="konfession">
-          <option value="keine">Keine</option>
-          <option value="rk">Roemisch-katholisch</option>
-          <option value="ev">Evangelisch-reformiert</option>
-        </select>
+        <div class="field">
+          <label for="konfession">Konfession</label>
+          <select id="konfession" name="konfession">
+            <option value="keine">Keine</option>
+            <option value="rk">Römisch-katholisch</option>
+            <option value="ev">Evangelisch-reformiert</option>
+          </select>
+        </div>
 
-        <label for="kanton">Kanton</label>
-        <select id="kanton" name="kanton"></select>
+        <div class="field field-wide">
+          <label for="kanton">Kanton</label>
+          <select id="kanton" name="kanton"></select>
+        </div>
 
-        <label for="gemeinde">Gemeinde</label>
-        <select id="gemeinde" name="gemeinde"></select>
+        <div class="field field-wide">
+          <label for="gemeinde">Gemeinde</label>
+          <select id="gemeinde" name="gemeinde"></select>
+        </div>
 
-        <label for="vermoegen">Nettovermögen (CHF, optional)</label>
-        <input type="number" id="vermoegen" name="vermoegen" min="0" step="1000" value="0">
+        <div class="field field-wide">
+          <label for="vermoegen">Nettovermögen <small>optional</small></label>
+          <div class="money-input money-input-sm">
+            <span>CHF</span>
+            <input type="number" id="vermoegen" name="vermoegen" min="0" step="1000" value="0">
+          </div>
+        </div>
       </fieldset>
 
       <div class="slider-row">
-        <label for="saeule3a">Saeule 3a Einzahlung: <output id="saeule3a-out">0 CHF</output></label>
+        <div class="slider-top">
+          <label for="saeule3a">Säule 3a Einzahlung</label>
+          <output id="saeule3a-out">0 CHF</output>
+        </div>
         <input type="range" id="saeule3a" min="0" max="7258" step="100" value="0">
-        <p class="slider-hint">Steuerersparnis: <strong id="saeule3a-vorteil">CHF 0.00</strong></p>
+        <p class="slider-hint">Du sparst <strong id="saeule3a-vorteil">CHF 0.00</strong> Steuern</p>
       </div>
 
       <div class="form-actions">
-        <button type="button" id="btn-speichern">Szenario speichern</button>
-        <button type="button" id="btn-share">Link teilen</button>
-        <button type="button" id="btn-reset">Zuruecksetzen</button>
+        <button type="button" id="btn-speichern" class="btn btn-ink">Szenario speichern</button>
+        <button type="button" id="btn-share" class="btn">Link teilen</button>
+        <button type="button" id="btn-reset" class="btn btn-quiet">Zurücksetzen</button>
       </div>
 
       <p id="fehler" class="error" role="alert" hidden></p>
     </form>
   </section>
 
-  <section aria-labelledby="h-result" class="card section-result">
-    <div class="section-head">
-      <h2 id="h-result">Ergebnis (gewaehlter Kanton)</h2>
-      <label class="toggle-line"><input type="checkbox" id="btn-trace"> Berechnungsweg anzeigen</label>
+  <!-- ============ ERGEBNIS ============ -->
+  <section aria-labelledby="h-result" class="panel panel-result">
+    <div class="panel-head">
+      <span class="sec-nr">B</span>
+      <h2 id="h-result">Ergebnis <span class="head-meta" id="kpi-context"></span></h2>
     </div>
-    <table class="result-table">
-      <tbody id="einzel-result">
-        <tr><td colspan="2">Noch keine Berechnung durchgefuehrt.</td></tr>
-      </tbody>
-    </table>
+
+    <div class="hero-number" aria-live="polite">
+      <span class="hn-label">Netto pro Monat</span>
+      <span class="hn-value"><small>CHF</small><span id="kpi-netto">–</span></span>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi kpi-red"><span class="kpi-label">Steuern pro Jahr</span><span class="kpi-value" id="kpi-total">–</span></div>
+      <div class="kpi"><span class="kpi-label">Durchschnittssatz</span><span class="kpi-value" id="kpi-avg">–</span></div>
+      <div class="kpi"><span class="kpi-label">Grenzsteuersatz</span><span class="kpi-value" id="kpi-marg">–</span></div>
+    </div>
+
+    <div class="split">
+      <p class="split-title">Von <strong id="split-hundert">100 Franken</strong> Lohn gehen …</p>
+      <div class="split-bar" id="split-bar" role="img" aria-label="Aufteilung des Bruttoeinkommens"></div>
+      <ul class="split-legend" id="split-legend"></ul>
+    </div>
+
+    <details class="posten" open>
+      <summary>
+        <span>Alle Posten</span>
+        <label class="toggle-line" onclick="event.stopPropagation()"><input type="checkbox" id="btn-trace"> Berechnungsweg anzeigen</label>
+      </summary>
+      <table class="result-table">
+        <tbody id="einzel-result">
+          <tr><td colspan="2">Noch keine Berechnung durchgeführt.</td></tr>
+        </tbody>
+      </table>
+    </details>
     <details id="trace-box" hidden>
-      <summary>Schritt-fuer-Schritt</summary>
+      <summary>Schritt für Schritt</summary>
       <div id="trace-content"></div>
     </details>
   </section>
+</main>
 
-  <section aria-labelledby="h-reverse" class="card section-reverse">
-    <h2 id="h-reverse">Reverse Search: Wunsch-Netto pro Monat</h2>
-    <div class="reverse-row">
-      <label for="reverse-netto">Netto/Monat (CHF)</label>
-      <input type="number" id="reverse-netto" min="0" step="100" value="6000">
-      <button type="button" id="btn-reverse">Berechnen</button>
+<!-- ============ VERGLEICH ============ -->
+<section id="vergleich" aria-labelledby="h-vergleich" class="block">
+  <div class="block-head">
+    <span class="block-nr">01</span>
+    <div>
+      <h2 id="h-vergleich">Kantonsvergleich</h2>
+      <p class="muted">Gleiche Angaben, jeweils im Hauptort. Was kostet ein Umzug? Beträge in CHF pro Jahr.</p>
     </div>
-    <p id="reverse-out" class="reverse-out"></p>
-  </section>
-
-  <section aria-labelledby="h-vergleich" class="card section-vergleich">
-    <div class="section-head">
-      <h2 id="h-vergleich">Kantonsvergleich (5 Kantone)</h2>
-      <button type="button" id="btn-csv">Als CSV herunterladen</button>
-    </div>
+    <button type="button" id="btn-csv" class="btn">Als CSV herunterladen</button>
+  </div>
+  <div class="vergleich-grid">
+    <div class="chart-wrap chart-bar"><canvas id="chart-canvas" aria-label="Balkendiagramm Steuerlast pro Kanton"></canvas></div>
     <div class="table-scroll">
       <table class="result-table compact">
         <thead>
           <tr>
             <th>Kanton</th><th>Gemeinde</th>
             <th>Bund</th><th>Kanton</th><th>Gemeinde</th><th>Kirche</th><th>Vermögen</th>
-            <th>Total</th><th>Diff. zu eigenem Kanton</th>
+            <th>Total</th><th>Differenz</th>
           </tr>
         </thead>
         <tbody id="vergleich-body"></tbody>
       </table>
     </div>
-    <div class="chart-wrap"><canvas id="chart-canvas" aria-label="Balkendiagramm Steuerlast pro Kanton"></canvas></div>
+  </div>
+</section>
+
+<!-- ============ PROGRESSION + REVERSE ============ -->
+<div class="duo">
+  <section id="progression" aria-labelledby="h-progression" class="block">
+    <div class="block-head">
+      <span class="block-nr">02</span>
+      <div>
+        <h2 id="h-progression">Progressionskurve</h2>
+        <p class="muted">Effektiver Steuersatz bei 0 bis 500'000 CHF Einkommen, im gewählten Kanton. Der rote Punkt bist du.</p>
+      </div>
+    </div>
+    <div class="chart-wrap"><canvas id="progression-canvas" aria-label="Liniendiagramm der Steuerprogression"></canvas></div>
   </section>
 
-  <section aria-labelledby="h-progression" class="card section-progression">
-    <h2 id="h-progression">Progressionskurve</h2>
-    <p class="muted">Effektiver Steuersatz bei Einkommen 0 - 500'000 CHF (gewaehlter Kanton/Gemeinde).</p>
-    <div class="chart-wrap"><canvas id="progression-canvas" aria-label="Linendiagramm der Steuerprogression"></canvas></div>
+  <section aria-labelledby="h-reverse" class="block block-dark">
+    <div class="block-head">
+      <span class="block-nr">03</span>
+      <div>
+        <h2 id="h-reverse">Rückwärts rechnen</h2>
+        <p class="muted">Wie viel Brutto brauchst du für dein Wunsch-Netto?</p>
+      </div>
+    </div>
+    <div class="reverse-row">
+      <label for="reverse-netto">Netto pro Monat</label>
+      <div class="money-input money-input-sm">
+        <span>CHF</span>
+        <input type="number" id="reverse-netto" min="0" step="100" value="6000">
+      </div>
+      <button type="button" id="btn-reverse" class="btn btn-red">Berechnen</button>
+    </div>
+    <div id="reverse-out" class="reverse-out"></div>
   </section>
+</div>
 
-  <section aria-labelledby="h-szenarien" class="card section-szenarien">
-    <h2 id="h-szenarien">Gespeicherte Szenarien <small id="scenario-count"></small></h2>
+<!-- ============ SZENARIEN + QUELLEN ============ -->
+<div class="duo duo-even">
+  <section id="szenarien" aria-labelledby="h-szenarien" class="block">
+    <div class="block-head">
+      <span class="block-nr">04</span>
+      <div>
+        <h2 id="h-szenarien">Gespeicherte Szenarien <small id="scenario-count"></small></h2>
+        <p class="muted">Im Browser gespeichert. Zwei auswählen, um sie zu vergleichen.</p>
+      </div>
+    </div>
     <ul id="scenario-list" class="scenario-list"></ul>
     <div class="form-actions">
-      <button type="button" id="btn-compare">Zwei ausgewaehlte vergleichen</button>
+      <button type="button" id="btn-compare" class="btn">Zwei ausgewählte vergleichen</button>
     </div>
     <div id="compare-result" hidden></div>
   </section>
 
-  <section aria-labelledby="h-quellen" class="card section-quellen">
-    <h2 id="h-quellen">Tarife und Quellen</h2>
-    <p>Einkommens- und Vermögenssteuer. Tarife Stand 2025/2026, Quelle: ESTV swisstaxcalculator (Grunddaten Tarife + Steuerfuesse).</p>
-    <p>Vollstaendige Quellenliste: <a href="docs/quellen.md">docs/quellen.md</a>. Architektur: <a href="docs/architektur.md">docs/architektur.md</a>.</p>
+  <section aria-labelledby="h-quellen" class="block">
+    <div class="block-head">
+      <span class="block-nr">05</span>
+      <div><h2 id="h-quellen">Tarife und Quellen</h2></div>
+    </div>
+    <p>Einkommens- und Vermögenssteuer, Tarife Stand 2025/2026. Quelle: ESTV swisstaxcalculator (Grunddaten Tarife und Steuerfüsse). Es werden bewusst keine Platzhalter- oder Demo-Werte verwendet.</p>
+    <p class="links">
+      <a href="docs/quellen.md">Vollständige Quellenliste</a>
+      <a href="docs/architektur.md">Architektur</a>
+      <a href="tests/tests.html">Testfälle</a>
+    </p>
+    <p class="muted small">Alle Angaben ohne Gewähr. Abzüge wie Berufsauslagen oder Versicherungsprämien sind nicht berücksichtigt.</p>
   </section>
-
-</main>
+</div>
 
 <footer class="site-footer">
-  <p>SOL-1 Schulprojekt &middot; INFEFZ.1 BS &middot; Lehrjahr 1 &middot; MIT-Lizenz</p>
+  <span class="brand-mark sm" aria-hidden="true">%</span>
+  <p>SOL-1 Schulprojekt · INFEFZ.1 BS · Lehrjahr 1 · MIT-Lizenz</p>
 </footer>
+
+<div id="toast" class="toast" role="status" hidden></div>
 
 <!-- Chart.js via CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 
-<!-- Inline-Fallback fuer file:// (laed Daten als window.STEUER_DATA, falls fetch() blockiert ist) -->
+<!-- Inline-Fallback für file:// (lädt Daten als window.STEUER_DATA, falls fetch() blockiert ist) -->
 <script src="data/embedded.js?v=5"></script>
 
 <!-- Eigene Module -->
-<script src="src/js/validate.js?v=5"></script>
-<script src="src/js/calc.js?v=5"></script>
-<script src="src/js/storage.js?v=5"></script>
-<script src="src/js/chart.js?v=5"></script>
-<script src="src/js/main.js?v=5"></script>
+<script src="src/js/validate.js?v=6"></script>
+<script src="src/js/calc.js?v=6"></script>
+<script src="src/js/storage.js?v=6"></script>
+<script src="src/js/chart.js?v=6"></script>
+<script src="src/js/main.js?v=7"></script>
 
 </body>
 </html>

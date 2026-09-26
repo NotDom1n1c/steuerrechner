@@ -62,8 +62,7 @@ steuerrechner/
       validate.js         Input-Validierung
     css/
       reset.css
-      main.css            Layout + Dark Theme
-      responsive.css      Mobile-first Breakpoints
+      main.css            Design ("Swiss poster"), Light/Dark Theme, Breakpoints
   data/
     bundessteuer_2026.json   (Bund-Tarif, Stand 2025)
     kanton_ag.json  kanton_be.json  kanton_bs.json
