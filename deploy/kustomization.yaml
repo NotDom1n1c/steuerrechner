@@ -11,4 +11,4 @@ labels:
 images:
   - name: app-image
     newName: ghcr.io/notdom1n1c/steuerrechner
-    newTag: sha-e9b16ea
+    newTag: sha-eb4ebc8
